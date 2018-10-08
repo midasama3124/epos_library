@@ -7,16 +7,16 @@ find_package(catkin REQUIRED)
 #EXECUTE_PROCESS( COMMAND uname -m COMMAND tr -d '\n' OUTPUT_VARIABLE ARCHITECTURE )
 
 # find the 32/64 bits or rpi libraries
-#if(CMAKE_SIZEOF_VOID_P EQUAL 8)
+if(CMAKE_SIZEOF_VOID_P EQUAL 8)
   # Architecture for 64-bits distribution
-  #set(ARCH "x86_64")
-#elseif(${ARCHITECTURE} EQUAL "armv7l")
+  set(ARCH "x86_64")
+elseif(CMAKE_SIZEOF_VOID_P EQUAL 4)
+  # Architecture for 32-bits distribution
+  set(ARCH "x86")
+else()
   # Architecture for Raspberry Pi3 Model B
   set(ARCH "armv7hf")
-#else()
-  # Architecture for 32-bits distribution
-  #set(ARCH "x86")
-#endif()
+endif()
 
 message(STATUS "Detected architecture: ${ARCH}")
 
@@ -31,15 +31,15 @@ catkin_package(
 
 include_directories(include)
 
-#if(${ARCHITECTURE} EQUAL "armv7l")
+if(${ARCH} EQUAL "armv7l")
   # Libraries for Raspberry Pi3 Model B
   set(ftd2xx_LIBRARY ${PROJECT_SOURCE_DIR}/lib/${ARCH}/libftd2xx.so.1.4.6)
   set(EposCmd_LIBRARY ${PROJECT_SOURCE_DIR}/lib/${ARCH}/libEposCmd.so.6.3.1.0)
-#else()
+else()
   # Libraries for other distributions
-  #set(ftd2xx_LIBRARY ${PROJECT_SOURCE_DIR}/lib/${ARCH}/libftd2xx.so.1.1.12)
-  #set(EposCmd_LIBRARY ${PROJECT_SOURCE_DIR}/lib/${ARCH}/libEposCmd.so.5.0.1.0)
-#endif()
+  set(ftd2xx_LIBRARY ${PROJECT_SOURCE_DIR}/lib/${ARCH}/libftd2xx.so.1.1.12)
+  set(EposCmd_LIBRARY ${PROJECT_SOURCE_DIR}/lib/${ARCH}/libEposCmd.so.5.0.1.0)
+endif()
 
 add_library(ftd2xx SHARED ${ftd2xx_LIBRARY})
 add_custom_command(TARGET ftd2xx POST_BUILD COMMAND cp ${ftd2xx_LIBRARY} ${CMAKE_LIBRARY_OUTPUT_DIRECTORY}/libftd2xx.so)
