@@ -17,7 +17,8 @@ find_package(catkin REQUIRED)
 #endif()
 
 # Architecture for Raspberry Pi3 Model B
-set(ARCH "arm/rpi")
+#set(ARCH "arm/rpi")
+set(ARCH "armv7hf")
 message(STATUS "Detected architecture: ${ARCH}")
 
 catkin_package(
