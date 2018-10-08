@@ -3,19 +3,20 @@ project(epos_library)
 
 find_package(catkin REQUIRED)
 
-# find machine hardware name
-#EXECUTE_PROCESS( COMMAND uname -m COMMAND tr -d '\n' OUTPUT_VARIABLE ARCHITECTURE )
+# find linux architecture
+EXECUTE_PROCESS( COMMAND arch OUTPUT_VARIABLE ARCHITECTURE OUTPUT_STRIP_TRAILING_WHITESPACE )
 
 # find the 32/64 bits or rpi libraries
-if(CMAKE_SIZEOF_VOID_P EQUAL 8)
+#if(CMAKE_SIZEOF_VOID_P EQUAL 8)
+if(${ARCHITECTURE} EQUAL "x86_64")
   # Architecture for 64-bits distribution
   set(ARCH "x86_64")
-elseif(CMAKE_SIZEOF_VOID_P EQUAL 4)
-  # Architecture for 32-bits distribution
-  set(ARCH "x86")
-else()
+elseif(${ARCHITECTURE} EQUAL "armv7l")
   # Architecture for Raspberry Pi3 Model B
   set(ARCH "armv7hf")
+else()
+  # Architecture for 32-bits distribution
+  set(ARCH "x86")
 endif()
 
 message(STATUS "Detected architecture: ${ARCH}")
