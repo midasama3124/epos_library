@@ -8,10 +8,10 @@ EXECUTE_PROCESS( COMMAND arch OUTPUT_VARIABLE ARCHITECTURE OUTPUT_STRIP_TRAILING
 
 # find the 32/64 bits or rpi libraries
 #if(CMAKE_SIZEOF_VOID_P EQUAL 8)
-if(${ARCHITECTURE} EQUAL "x86_64")
+if(${ARCHITECTURE} STREQUAL "x86_64")
   # Architecture for 64-bits distribution
   set(ARCH "x86_64")
-elseif(${ARCHITECTURE} EQUAL "armv7l")
+elseif(${ARCHITECTURE} STREQUAL "armv7l")
   # Architecture for Raspberry Pi3 Model B
   set(ARCH "armv7hf")
 else()
@@ -19,7 +19,7 @@ else()
   set(ARCH "x86")
 endif()
 
-message(STATUS "Detected architecture: ${ARCH}")
+message(STATUS "Detected architecture: ${ARCHITECTURE}")
 
 catkin_package(
   INCLUDE_DIRS include
@@ -32,7 +32,7 @@ catkin_package(
 
 include_directories(include)
 
-if(${ARCH} EQUAL "armv7l")
+if(${ARCH} STREQUAL "armv7hf")
   # Libraries for Raspberry Pi3 Model B
   set(ftd2xx_LIBRARY ${PROJECT_SOURCE_DIR}/lib/${ARCH}/libftd2xx.so.1.4.6)
   set(EposCmd_LIBRARY ${PROJECT_SOURCE_DIR}/lib/${ARCH}/libEposCmd.so.6.3.1.0)
